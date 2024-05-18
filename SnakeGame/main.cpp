@@ -56,7 +56,7 @@ int main(int argc, char* argv[]) {
 	int size = 1;
 
 	// Snake body container
-	std::deque<SDL_Rect> rq;
+	std::deque<SDL_Rect> snakeBody;
 
 	// Apple container
 	std::vector<SDL_Rect> apples;
@@ -115,39 +115,40 @@ int main(int argc, char* argv[]) {
 		// Collision detection with apple
 		std::for_each(apples.begin(), apples.end(), [&](auto& apple) {
 			if (head.x == apple.x && head.y == apple.y) {
-				//size += 10;  change from 10 to 1
 				size += 1;
+
+				// Move the apple outside the screen
 				apple.x = -10;
 				apple.y = -10;
 			}
 			});
 
 		// Collision detection with snake body
-		std::for_each(rq.begin(), rq.end(), [&](auto& snake_segment) {
+		std::for_each(snakeBody.begin(), snakeBody.end(), [&](auto& snake_segment) {
 			if (head.x == snake_segment.x && head.y == snake_segment.y) {
 				size = 1;
 			}
 			});
 
 		// Add newest head to the snake
-		rq.push_front(head);
-		while (rq.size() > size) {
-			rq.pop_back();
+		snakeBody.push_front(head);
+		while (snakeBody.size() > size) {
+			snakeBody.pop_back();
 		}
 
 		// Clear Window
-		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+		SDL_SetRenderDrawColor(renderer, 198, 215, 107, 255);
 		SDL_RenderClear(renderer);
 
 
 		// Draw Body
-		SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-		std::for_each(rq.begin(), rq.end(), [&](auto& snake_segment) {
+		SDL_SetRenderDrawColor(renderer, 117, 129, 51, 255);
+		std::for_each(snakeBody.begin(), snakeBody.end(), [&](auto& snake_segment) {
 			SDL_RenderFillRect(renderer, &snake_segment);
 			});
 
 		// Draw apples
-		SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+		SDL_SetRenderDrawColor(renderer, 192, 118, 81, 255);
 		std::for_each(apples.begin(), apples.end(), [&](auto& apple) {
 			SDL_RenderFillRect(renderer, &apple);
 			});
