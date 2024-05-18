@@ -112,6 +112,12 @@ int main(int argc, char* argv[]) {
 			break;
 		}
 
+		// Wrap around the screen
+		if (head.x < 0) head.x = SCREEN_WIDTH - APPLE_SIZE;
+		if (head.x >= SCREEN_WIDTH) head.x = 0;
+		if (head.y < 0) head.y = SCREEN_HEIGHT - APPLE_SIZE;
+		if (head.y >= SCREEN_HEIGHT) head.y = 0;
+
 		// Collision detection with apple
 		std::for_each(apples.begin(), apples.end(), [&](auto& apple) {
 			if (head.x == apple.x && head.y == apple.y) {
