@@ -4,6 +4,31 @@
 #include <algorithm>
 #include <deque>
 
+enum Direction {
+	UP,
+	DOWN,
+	LEFT,
+	RIGHT
+};
+
+void handleDirectionChange(SDL_Keycode key, Direction& dir, Direction& previousDir) {
+	switch (key) {
+	case SDLK_UP:
+		if (previousDir != DOWN) { dir = UP; previousDir = dir; }
+		break;
+	case SDLK_DOWN:
+		if (previousDir != UP) { dir = DOWN; previousDir = dir; }
+		break;
+	case SDLK_LEFT:
+		if (previousDir != RIGHT) { dir = LEFT; previousDir = dir; }
+		break;
+	case SDLK_RIGHT:
+		if (previousDir != LEFT) { dir = RIGHT; previousDir = dir; }
+		break;
+	}
+}
+
+
 int main(int argc, char* argv[]) {
 
 	const int FPS = 15;
@@ -16,15 +41,11 @@ int main(int argc, char* argv[]) {
 	SDL_Renderer* renderer = SDL_CreateRenderer(window, 1, 0);
 	SDL_Event sdlEvent;
 
-	enum Direction {
-		UP,
-		DOWN,
-		LEFT,
-		RIGHT
-	};
+
 
 	bool isRunning = true;
 	Direction dir = UP;
+	Direction previousDir = dir;
 
 	SDL_Rect head{ 500, 500, 10, 10 };
 	int size = 1;
@@ -58,11 +79,12 @@ int main(int argc, char* argv[]) {
 				isRunning = false;
 				break;
 			case SDL_KEYDOWN:
-				if (sdlEvent.key.keysym.sym == SDLK_ESCAPE) { isRunning = false; }
-				if (sdlEvent.key.keysym.sym == SDLK_UP) { dir = UP; }
-				if (sdlEvent.key.keysym.sym == SDLK_DOWN) { dir = DOWN; }
-				if (sdlEvent.key.keysym.sym == SDLK_LEFT) { dir = LEFT; }
-				if (sdlEvent.key.keysym.sym == SDLK_RIGHT) { dir = RIGHT; }
+				if (sdlEvent.key.keysym.sym == SDLK_ESCAPE) { 
+					isRunning = false; 
+				}
+				else {
+					handleDirectionChange(sdlEvent.key.keysym.sym, dir, previousDir);
+				}
 				break;
 			}
 		}
