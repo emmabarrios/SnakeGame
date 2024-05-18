@@ -13,19 +13,19 @@ enum Direction {
 	RIGHT
 };
 
-void handleDirectionChange(SDL_Keycode key, Direction& dir, Direction& previousDir) {
+void handleDirectionChange(SDL_Keycode key, Direction& dir, Direction& previousDir, int& currentSize) {
 	switch (key) {
 	case SDLK_UP:
-		if (previousDir != DOWN) { dir = UP; previousDir = dir; }
+		if (previousDir != DOWN || currentSize == 1) { dir = UP; previousDir = dir; }
 		break;
 	case SDLK_DOWN:
-		if (previousDir != UP) { dir = DOWN; previousDir = dir; }
+		if (previousDir != UP || currentSize == 1) { dir = DOWN; previousDir = dir; }
 		break;
 	case SDLK_LEFT:
-		if (previousDir != RIGHT) { dir = LEFT; previousDir = dir; }
+		if (previousDir != RIGHT || currentSize == 1) { dir = LEFT; previousDir = dir; }
 		break;
 	case SDLK_RIGHT:
-		if (previousDir != LEFT) { dir = RIGHT; previousDir = dir; }
+		if (previousDir != LEFT || currentSize == 1) { dir = RIGHT; previousDir = dir; }
 		break;
 	}
 }
@@ -90,7 +90,7 @@ int main(int argc, char* argv[]) {
 					isRunning = false; 
 				}
 				else {
-					handleDirectionChange(sdlEvent.key.keysym.sym, dir, previousDir);
+					handleDirectionChange(sdlEvent.key.keysym.sym, dir, previousDir, size);
 				}
 				break;
 			}
@@ -143,18 +143,18 @@ int main(int argc, char* argv[]) {
 		}
 
 		// Clear Window
-		SDL_SetRenderDrawColor(renderer, 198, 215, 107, 255);
+		SDL_SetRenderDrawColor(renderer, 186, 196, 5, 255);
 		SDL_RenderClear(renderer);
 
 
 		// Draw Body
-		SDL_SetRenderDrawColor(renderer, 117, 129, 51, 255);
+		SDL_SetRenderDrawColor(renderer, 113, 104, 4, 255);
 		std::for_each(snakeBody.begin(), snakeBody.end(), [&](auto& snake_segment) {
 			SDL_RenderFillRect(renderer, &snake_segment);
 			});
 
 		// Draw apples
-		SDL_SetRenderDrawColor(renderer, 192, 118, 81, 255);
+		SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
 		std::for_each(apples.begin(), apples.end(), [&](auto& apple) {
 			SDL_RenderFillRect(renderer, &apple);
 			});
