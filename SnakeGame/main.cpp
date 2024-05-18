@@ -4,6 +4,8 @@
 #include <algorithm>
 #include <deque>
 
+
+
 enum Direction {
 	UP,
 	DOWN,
@@ -30,20 +32,23 @@ void handleDirectionChange(SDL_Keycode key, Direction& dir, Direction& previousD
 
 
 int main(int argc, char* argv[]) {
-
+	const int SCREEN_WIDTH = 800;
+	const int SCREEN_HEIGHT = 600;
+	const int APPLE_SIZE = 10;
+	const int NUM_APPLES = 100;
 	const int FPS = 15;
 	const int MILLISECS_PER_FRAME = 1000 / FPS;
 	int millisecsPreviousFrame = 0;
 
 	SDL_Init(SDL_INIT_EVERYTHING);
 
-	SDL_Window* window = SDL_CreateWindow("Snake", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1000, 1000, 0);
+	//SDL_Window* window = SDL_CreateWindow("Snake", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1000, 1000, 0);
+	SDL_Window* window = SDL_CreateWindow("Snake", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 600, 0);
 	SDL_Renderer* renderer = SDL_CreateRenderer(window, 1, 0);
 	SDL_Event sdlEvent;
 
-
-
 	bool isRunning = true;
+
 	Direction dir = UP;
 	Direction previousDir = dir;
 
@@ -57,8 +62,10 @@ int main(int argc, char* argv[]) {
 	std::vector<SDL_Rect> apples;
 
 
-	for (int i = 0; i < 100; i++) {
-		SDL_Rect apple{ rand() % 100 * 10, rand() % 100 * 10, 10, 10 };
+	for (int i = 0; i < NUM_APPLES; i++) {
+		SDL_Rect apple{ rand() % (SCREEN_WIDTH / APPLE_SIZE) * APPLE_SIZE,
+						rand() % (SCREEN_HEIGHT / APPLE_SIZE) * APPLE_SIZE,
+						APPLE_SIZE, APPLE_SIZE};
 		apples.push_back(apple);
 	}
 
